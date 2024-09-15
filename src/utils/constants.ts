@@ -1,6 +1,4 @@
-export const REDIRECT_URI = import.meta.env.PROD
-  ? import.meta.env.VITE_PROD_REDIRECT_URI
-  : import.meta.env.VITE_DEV_REDIRECT_URI;
+export const REDIRECT_URI = `${import.meta.env.BASE_URL}/launch`;
 export const CLIENT_ID = import.meta.env.VITE_CERNER_CLIENT_ID;
 
 export const COOKIE_KEYS = {
