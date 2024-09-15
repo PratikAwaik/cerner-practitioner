@@ -5,6 +5,10 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LaunchPage from "./pages/launch.tsx";
 import { Toaster } from "react-hot-toast";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+// Create a client
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -16,7 +20,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
-    <Toaster />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <Toaster />
+    </QueryClientProvider>
   </StrictMode>
 );
