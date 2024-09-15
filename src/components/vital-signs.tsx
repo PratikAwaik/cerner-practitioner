@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 import {
   Table,
   TableBody,
@@ -16,8 +16,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
-import { Spinner } from "../ui/spinner";
+} from "./ui/table";
+import { Spinner } from "./ui/spinner";
 
 const columnHelper = createColumnHelper<Observation>();
 
