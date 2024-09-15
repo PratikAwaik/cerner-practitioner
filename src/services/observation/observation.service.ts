@@ -5,8 +5,8 @@ export class ObservationService {
   async getVitalSigns(patientId: string) {
     return fhirApi.get<Bundle<Observation>>(`/Observation`, {
       params: {
-        subject: patientId,
-        category: "laboratory",
+        patient: patientId,
+        category: "vital-signs",
         sort: "-date",
       },
     });

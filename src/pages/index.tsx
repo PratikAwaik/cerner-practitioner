@@ -5,6 +5,7 @@ import { getLSValue } from "../utils/local-storage";
 import { useGetPatient } from "@/services/patient/patient.data";
 import { Spinner } from "@/components/ui/spinner";
 import { PatientBanner } from "@/components/patient-banner";
+import { VitalSigns } from "@/components/vital-signs";
 
 export default function HomePage() {
   const token = getCookie(COOKIE_KEYS.ACCESS_TOKEN);
@@ -46,9 +47,11 @@ export default function HomePage() {
   }
 
   return (
-    <div className="w-full h-full flex items-center p-4 bg-primary/20">
-      {!!needPatientBanner && <PatientBanner patient={patient!} />}
-      <p>Main content</p>
+    <div className="w-full h-full flex items-center p-4">
+      <div className="w-full flex flex-col gap-y-6">
+        {!!needPatientBanner && <PatientBanner patient={patient!} />}
+        <VitalSigns />
+      </div>
     </div>
   );
 }
