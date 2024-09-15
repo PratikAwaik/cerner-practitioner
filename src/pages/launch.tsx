@@ -12,6 +12,8 @@ import {
 } from "../utils/constants";
 import { createRandomString, secondsToDays } from "../utils/helpers";
 import toast from "react-hot-toast";
+import { Token } from "../types";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function LaunchPage() {
   const [searchParams] = useSearchParams();
@@ -22,6 +24,7 @@ export default function LaunchPage() {
   const codeParam = searchParams.get("code");
   const stateParam = searchParams.get("state");
 
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
   const generateAndSetPkceChallenge = async () => {
@@ -91,8 +94,6 @@ export default function LaunchPage() {
     const iss = getLSValue(LOCALSTORAGE_KEYS.CURRENT_ISS);
     const tokenUrl = getLSValue(iss)?.token_endpoint as string;
 
-    console.log({ tokenUrl });
-
     const response = await axios.post(
       tokenUrl,
       {
@@ -124,12 +125,17 @@ export default function LaunchPage() {
 
     if (codeParam) {
       if (stateParam && isStateSame(stateParam)) {
+        setLoading(true);
         getToken(codeParam)
-          .then((response) => {
+          .then((response: Token) => {
             const expires = secondsToDays(response.expires_in);
             setCookie(COOKIE_KEYS.ACCESS_TOKEN, response.access_token, {
               expires,
             });
+            setLSValue(
+              LOCALSTORAGE_KEYS.NEED_PATIENT_BANNER,
+              response.need_patient_banner
+            );
             deleteCookie(COOKIE_KEYS.CODE_VERIFIER);
             deleteCookie(COOKIE_KEYS.STATE);
             toast.success("Successfully signed in.");
@@ -138,6 +144,9 @@ export default function LaunchPage() {
           .catch((err) => {
             console.error(err);
             toast.error("Something went wrong. Please try again!");
+          })
+          .finally(() => {
+            setLoading(false);
           });
       } else {
         toast.error(
@@ -160,6 +169,14 @@ export default function LaunchPage() {
     return (
       <div className="flex items-center justify-center w-full h-full">
         <p className="text-3xl font-semibold">{error}</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="items-center justify-center w-full h-full">
+        <Spinner />
       </div>
     );
   }

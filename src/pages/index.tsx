@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
-import { COOKIE_KEYS } from "../utils/constants";
+import { COOKIE_KEYS, LOCALSTORAGE_KEYS } from "../utils/constants";
 import { getCookie } from "../utils/cookie-storage";
+import { getLSValue } from "../utils/local-storage";
 
 export default function HomePage() {
   const token = getCookie(COOKIE_KEYS.ACCESS_TOKEN);
+  const needPatientBanner = getLSValue(
+    LOCALSTORAGE_KEYS.NEED_PATIENT_BANNER
+  ) as boolean;
   const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
@@ -12,7 +16,7 @@ export default function HomePage() {
     }
   }, [token]);
 
-  console.log({ token });
+  console.log({ needPatientBanner });
 
   if (error) {
     return (

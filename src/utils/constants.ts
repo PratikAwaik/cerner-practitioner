@@ -11,4 +11,5 @@ export const COOKIE_KEYS = {
 
 export const LOCALSTORAGE_KEYS = {
   CURRENT_ISS: "cerner_current_iss",
+  NEED_PATIENT_BANNER: "cerner_need_patient_banner",
 };
