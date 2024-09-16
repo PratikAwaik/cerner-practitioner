@@ -36,6 +36,7 @@ const vitalSigns = [
 ];
 
 export const CreateVitalSignSheet = () => {
+  const [open, setOpen] = useState(false);
   const [vitalSign, setVitalSign] = useState<string>();
   const [date, setDate] = useState<Date>(new Date());
   const [value, setValue] = useState<Array<number> | number | null>(null);
@@ -48,7 +49,11 @@ export const CreateVitalSignSheet = () => {
     []
   );
 
-  const { mutateAsync: createVitalSign, isPending } = useCreateVitalSign();
+  const { mutateAsync: createVitalSign, isPending } = useCreateVitalSign({
+    onSuccess() {
+      setOpen(false);
+    },
+  });
 
   const renderValueField = useCallback(() => {
     // blood pressure
@@ -95,6 +100,13 @@ export const CreateVitalSignSheet = () => {
       );
     }
   }, [vitalSign, value]);
+
+  const getUnit = useCallback(() => {
+    // blood pressure
+    if (vitalSign === "85354-9") return "mm[Hg]";
+    if (vitalSign === "69000-8") return "bpm";
+    if (vitalSign === "8331-1") return "degC";
+  }, [vitalSign]);
 
   const createPayload = useCallback(() => {
     const payload: Partial<Observation> = {
@@ -222,7 +234,7 @@ export const CreateVitalSignSheet = () => {
   }, [createPayload, createVitalSign]);
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger>
         <Button>Create vital sign</Button>
       </SheetTrigger>
@@ -257,9 +269,15 @@ export const CreateVitalSignSheet = () => {
             <DatePicker date={date} setDate={setDate} />
           </div>
           {!!vitalSign && (
-            <div className="w-full flex flex-col gap-y-1">
-              <label className="font-medium text-sm">Value</label>
-              {renderValueField()}
+            <div className="flex items-center gap-x-4">
+              <div className="w-full flex flex-col gap-y-1">
+                <label className="font-medium text-sm">Value</label>
+                {renderValueField()}
+              </div>
+              <div className="w-full flex flex-col gap-y-1">
+                <label className="font-medium text-sm">Unit</label>
+                <Input disabled value={getUnit()} />
+              </div>
             </div>
           )}
         </div>

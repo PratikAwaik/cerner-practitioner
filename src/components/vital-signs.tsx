@@ -22,7 +22,7 @@ import { CreateVitalSignSheet } from "./create-vital-sign-sheet";
 const columnHelper = createColumnHelper<Observation>();
 
 export const VitalSigns = () => {
-  const { observationData, isLoading } = useGetVitalSigns();
+  const { observationData, isLoading, isFetching } = useGetVitalSigns();
 
   const observations = useMemo(
     () =>
@@ -162,7 +162,7 @@ export const VitalSigns = () => {
             ))}
           </TableHeader>
           <TableBody>
-            {isLoading ? (
+            {isLoading || isFetching ? (
               <TableRow>
                 <TableCell colSpan={columns.length}>
                   <div className="w-full flex items-center justify-center my-10">
