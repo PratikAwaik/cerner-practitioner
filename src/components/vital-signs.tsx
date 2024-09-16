@@ -8,7 +8,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Button } from "./ui/button";
 import {
   Table,
   TableBody,
@@ -18,6 +17,7 @@ import {
   TableRow,
 } from "./ui/table";
 import { Spinner } from "./ui/spinner";
+import { CreateVitalSignSheet } from "./create-vital-sign-sheet";
 
 const columnHelper = createColumnHelper<Observation>();
 
@@ -139,7 +139,7 @@ export const VitalSigns = () => {
     <div className="w-full h-full flex flex-col gap-y-4">
       <div className="w-full flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Vital Signs</h2>
-        <Button>Create vital sign</Button>
+        <CreateVitalSignSheet />
       </div>
       <div className="w-full h-full max-h-[70vh] overflow-auto border pb-2">
         <Table>

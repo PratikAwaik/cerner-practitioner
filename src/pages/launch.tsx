@@ -38,8 +38,6 @@ export default function LaunchPage() {
     return cookieState === searchParamState;
   }, []);
 
-  console.log({ REDIRECT_URI });
-
   const getWellknownConfiguration = useCallback(async (iss: string) => {
     const lsWellknown = getLSValue(iss);
     if (lsWellknown) {
@@ -139,6 +137,7 @@ export default function LaunchPage() {
               response.need_patient_banner
             );
             setLSValue(LOCALSTORAGE_KEYS.CURRENT_PATIENT, response.patient);
+            setLSValue(LOCALSTORAGE_KEYS.CURRENT_ENCOUNTER, response.encounter);
             deleteCookie(COOKIE_KEYS.CODE_VERIFIER);
             deleteCookie(COOKIE_KEYS.STATE);
             toast.success("Successfully signed in.");

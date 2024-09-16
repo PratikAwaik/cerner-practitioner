@@ -34,8 +34,8 @@ export const PatientBanner = ({ patient }: PatientBannerProps) => {
             ? format(new Date(patient.birthDate), "do MMM yyyy")
             : "Unknown"}
         </p>
-        <p>
-          <span className="font-semibold mr-1 capitalize">Gender:</span>
+        <p className="capitalize">
+          <span className="font-semibold mr-1">Gender:</span>
           {patient?.gender}
         </p>
       </CardContent>

@@ -11,4 +11,12 @@ export class ObservationService {
       },
     });
   }
+
+  async createVitalSign(payload: Partial<Observation>) {
+    return fhirApi.post("/Observation", payload, {
+      headers: {
+        Accept: "application/fhir+json",
+      },
+    });
+  }
 }

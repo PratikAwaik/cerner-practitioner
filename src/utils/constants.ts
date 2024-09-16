@@ -13,4 +13,5 @@ export const LOCALSTORAGE_KEYS = {
   CURRENT_ISS: "cerner_current_iss",
   NEED_PATIENT_BANNER: "cerner_need_patient_banner",
   CURRENT_PATIENT: "cerner_current_patient",
+  CURRENT_ENCOUNTER: "cerner_current_encounter",
 };
