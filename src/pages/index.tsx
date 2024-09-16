@@ -14,7 +14,7 @@ export default function HomePage() {
   ) as boolean;
   const [error, setError] = useState<string | undefined>();
 
-  const { patient, isLoading } = useGetPatient();
+  const { patient, isLoading, isError } = useGetPatient();
 
   useEffect(() => {
     if (!token) {
@@ -30,25 +30,30 @@ export default function HomePage() {
     }
   }, [isLoading, needPatientBanner, patient]);
 
-  if (error) {
+  if (error || isError) {
     return (
-      <div className="flex items-center justify-center w-full h-full">
-        <p className="text-3xl font-semibold">{error}</p>
+      <div className="flex items-center justify-center w-screen h-screen">
+        <p className="text-3xl font-semibold">
+          {error || "Something went wrong. Retry the launch flow!"}
+        </p>
       </div>
     );
   }
 
   if (isLoading) {
     return (
-      <div className="items-center justify-center w-full h-full">
-        <Spinner />
+      <div className="flex items-center justify-center w-screen h-screen">
+        <div className="flex flex-col gap-y-2 items-center justify-center">
+          <Spinner className="h-10 w-10" />
+          <p>Loading...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full flex items-center p-4">
-      <div className="w-full flex flex-col gap-y-6">
+    <div className="max-w-4xl mx-auto h-screen flex items-start p-4">
+      <div className="w-full flex flex-col gap-y-6 items-start">
         {!!needPatientBanner && <PatientBanner patient={patient!} />}
         <VitalSigns />
       </div>

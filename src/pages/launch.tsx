@@ -24,7 +24,6 @@ export default function LaunchPage() {
   const codeParam = searchParams.get("code");
   const stateParam = searchParams.get("state");
 
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
   const generateAndSetPkceChallenge = async () => {
@@ -114,10 +113,6 @@ export default function LaunchPage() {
   }, []);
 
   useEffect(() => {
-    if (!issParam || !launchParam) {
-      setError("ISS or Launch Parameters not found!");
-    }
-
     if (issParam && launchParam) {
       initiateOAuth(issParam, launchParam);
       return;
@@ -125,7 +120,6 @@ export default function LaunchPage() {
 
     if (codeParam) {
       if (stateParam && isStateSame(stateParam)) {
-        setLoading(true);
         getToken(codeParam)
           .then((response: Token) => {
             const expires = secondsToDays(response.expires_in);
@@ -146,15 +140,17 @@ export default function LaunchPage() {
           .catch((err) => {
             console.error(err);
             toast.error("Something went wrong. Please try again!");
-          })
-          .finally(() => {
-            setLoading(false);
           });
       } else {
         toast.error(
           "Your code has been compromised. Please restart the launch process!"
         );
       }
+      return;
+    }
+
+    if (!issParam || !launchParam) {
+      setError("ISS or Launch Parameters not found!");
     }
   }, [
     issParam,
@@ -169,19 +165,18 @@ export default function LaunchPage() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center w-full h-full">
+      <div className="flex items-center justify-center w-screen h-screen">
         <p className="text-3xl font-semibold">{error}</p>
       </div>
     );
   }
 
-  if (loading) {
-    return (
-      <div className="items-center justify-center w-full h-full">
-        <Spinner />
+  return (
+    <div className="flex items-center justify-center w-screen h-screen">
+      <div className="flex flex-col gap-y-2 items-center justify-center">
+        <Spinner className="h-10 w-10" />
+        <p>Loading...</p>
       </div>
-    );
-  }
-
-  return <div>Launch</div>;
+    </div>
+  );
 }

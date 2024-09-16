@@ -285,7 +285,7 @@ export const CreateVitalSignSheet = () => {
           <SheetClose asChild>
             <Button variant="secondary">Close</Button>
           </SheetClose>
-          <Button onClick={handleSubmit} disabled={isPending}>
+          <Button onClick={handleSubmit} isLoading={isPending}>
             Create
           </Button>
         </SheetFooter>

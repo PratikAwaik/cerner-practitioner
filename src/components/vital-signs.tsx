@@ -22,7 +22,8 @@ import { CreateVitalSignSheet } from "./create-vital-sign-sheet";
 const columnHelper = createColumnHelper<Observation>();
 
 export const VitalSigns = () => {
-  const { observationData, isLoading, isFetching } = useGetVitalSigns();
+  const { observationData, isLoading, isFetching, isError } =
+    useGetVitalSigns();
 
   const observations = useMemo(
     () =>
@@ -32,26 +33,24 @@ export const VitalSigns = () => {
     [observationData]
   );
 
-  console.log(observations);
-
   const getUnit = useCallback((report: Observation) => {
     if (report.component) {
-      return report.component?.[0]?.valueQuantity?.unit;
+      return report.component?.[0]?.valueQuantity?.unit || "-";
     }
-    if (report.valueQuantity) return report.valueQuantity?.unit || "Unknown";
+    if (report.valueQuantity) return report.valueQuantity?.unit || "-";
     if (report.valueRange) {
       const high = report.valueRange.high?.unit;
       const low = report.valueRange.low?.unit;
-      return `High: ${high !== undefined ? high : "Unknown"}, Low: ${
-        low !== undefined ? low : "Unknown"
+      return `High: ${high !== undefined ? high : "-"}, Low: ${
+        low !== undefined ? low : "-"
       }`;
     }
     if (report.valueRatio) {
       const numerator = report.valueRatio.numerator?.unit;
       const denominator = report.valueRatio.denominator?.unit;
       return `Numerator: ${
-        numerator !== undefined ? numerator : "Unknown"
-      }, Denominator${denominator !== undefined ? denominator : "Unknown"}`;
+        numerator !== undefined ? numerator : "-"
+      }, Denominator${denominator !== undefined ? denominator : "-"}`;
     }
     return "-";
   }, []);
@@ -95,6 +94,7 @@ export const VitalSigns = () => {
         to ? format(new Date(to), "do MMM yyyy 'at' h:m a") : "Unknown"
       }`;
     }
+    return "Unknown";
   }, []);
 
   const columns = useMemo(
@@ -134,6 +134,16 @@ export const VitalSigns = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <p className="text-3xl font-semibold">
+          Something went wrong loading vital signs. Retry the launch flow!
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full flex flex-col gap-y-4">
